@@ -57,21 +57,34 @@ class ResearchAgent:
         self._model_name = MODELS[AGENT_MODEL]["name"]
 
     def _llm_call(self, system: str, user: str) -> str:
-        """Make a single LLM call."""
+        """Make a single LLM call with automatic model fallback."""
         api_key = get_api_key()
         if not api_key:
             return "Error: API key not configured."
 
         client = OpenAI(base_url=OPENROUTER_BASE_URL, api_key=api_key)
-        response = client.chat.completions.create(
-            model=self._model_id,
-            messages=[
-                {"role": "system", "content": system},
-                {"role": "user", "content": user},
-            ],
-            max_tokens=1500,
-        )
-        return response.choices[0].message.content or ""
+
+        fallback_order = [self._model_id] + [
+            m["id"] for m in MODELS.values() if m["id"] != self._model_id
+        ]
+
+        messages = [
+            {"role": "system", "content": system},
+            {"role": "user", "content": user},
+        ]
+
+        for try_model in fallback_order:
+            try:
+                response = client.chat.completions.create(
+                    model=try_model,
+                    messages=messages,
+                    max_tokens=1500,
+                )
+                return response.choices[0].message.content or ""
+            except Exception:
+                continue
+
+        return "All models are currently unavailable. Please try again in a moment."
 
     def _plan_sub_questions(self, question: str) -> list[str]:
         """Use the LLM to break down a complex question."""

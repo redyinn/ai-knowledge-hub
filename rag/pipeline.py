@@ -185,18 +185,31 @@ class RAGPipeline:
 
         client = OpenAI(base_url=OPENROUTER_BASE_URL, api_key=api_key)
 
-        try:
-            response = client.chat.completions.create(
-                model=model_id,
-                messages=[
-                    {"role": "system", "content": SYSTEM_PROMPT},
-                    {"role": "user", "content": prompt},
-                ],
-                max_tokens=2000,
-            )
-            answer = response.choices[0].message.content or ""
-        except Exception as e:
-            answer = f"Error calling model {model_id}: {e}"
+        # Try requested model, then fallback to others
+        fallback_order = [model_id] + [
+            m["id"] for t, m in MODELS.items() if m["id"] != model_id
+        ]
+
+        messages = [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": prompt},
+        ]
+
+        answer = "All models are currently unavailable. Please try again in a moment."
+        used_model = model_id
+
+        for try_model in fallback_order:
+            try:
+                response = client.chat.completions.create(
+                    model=try_model,
+                    messages=messages,
+                    max_tokens=2000,
+                )
+                answer = response.choices[0].message.content or ""
+                used_model = try_model
+                break
+            except Exception:
+                continue
 
         return RAGResponse(
             answer=answer,
@@ -205,7 +218,7 @@ class RAGPipeline:
             query=question,
             num_chunks_retrieved=len(results),
             metadata={
-                "model_id": model_id,
+                "model_id": used_model,
                 "model_tier": tier,
             },
         )
@@ -252,22 +265,33 @@ class RAGPipeline:
 
         client = OpenAI(base_url=OPENROUTER_BASE_URL, api_key=api_key)
 
-        try:
-            stream = client.chat.completions.create(
-                model=model_id,
-                messages=[
-                    {"role": "system", "content": SYSTEM_PROMPT},
-                    {"role": "user", "content": prompt},
-                ],
-                max_tokens=2000,
-                stream=True,
-            )
+        # Try requested model, then fallback to others
+        fallback_order = [model_id] + [
+            m["id"] for t, m in MODELS.items() if m["id"] != model_id
+        ]
 
-            full_answer = ""
-            for chunk in stream:
-                delta = chunk.choices[0].delta.content
-                if delta:
-                    full_answer += delta
-                    yield delta
-        except Exception as e:
-            yield f"\n\nError calling model {model_id}: {e}"
+        messages = [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": prompt},
+        ]
+
+        for try_model in fallback_order:
+            try:
+                stream = client.chat.completions.create(
+                    model=try_model,
+                    messages=messages,
+                    max_tokens=2000,
+                    stream=True,
+                )
+
+                full_answer = ""
+                for chunk in stream:
+                    delta = chunk.choices[0].delta.content
+                    if delta:
+                        full_answer += delta
+                        yield delta
+                return  # success — stop trying
+            except Exception:
+                continue  # try next model
+
+        yield "All models are currently unavailable. Please try again in a moment."
