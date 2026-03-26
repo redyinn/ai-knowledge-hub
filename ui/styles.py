@@ -182,13 +182,26 @@ CUSTOM_CSS = """
 
 .stChatInputContainer {
     border-color: rgba(28, 25, 23, 0.12) !important;
-    background: rgba(253, 252, 248, 0.9) !important;
+    background: rgba(253, 252, 248, 0.95) !important;
 }
 
 [data-testid="stChatInput"] textarea {
     font-family: 'Inter', sans-serif !important;
     font-weight: 300 !important;
     color: var(--ink) !important;
+    background: rgba(253, 252, 248, 0.95) !important;
+}
+
+[data-testid="stChatInput"] textarea::placeholder {
+    color: var(--warm-400) !important;
+}
+
+[data-testid="stBottom"] {
+    background: rgba(253, 252, 248, 0.95) !important;
+}
+
+[data-testid="stBottom"] > div {
+    background: rgba(253, 252, 248, 0.95) !important;
 }
 
 /* ── Routing Badge ───────────────────────────────────────────────── */
@@ -310,11 +323,25 @@ CUSTOM_CSS = """
 [data-testid="stFileUploader"] {
     border: 1px dashed rgba(28, 25, 23, 0.15) !important;
     border-radius: 2px;
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(253, 252, 248, 0.95) !important;
 }
 
 [data-testid="stFileUploader"]:hover {
     border-color: rgba(28, 25, 23, 0.3) !important;
+}
+
+[data-testid="stFileUploader"] p,
+[data-testid="stFileUploader"] span,
+[data-testid="stFileUploader"] small,
+[data-testid="stFileUploader"] label,
+[data-testid="stFileUploader"] div {
+    color: var(--ink) !important;
+}
+
+[data-testid="stFileUploader"] button {
+    background: var(--warm-100) !important;
+    color: var(--ink) !important;
+    border: 1px solid rgba(28, 25, 23, 0.15) !important;
 }
 
 /* ── Select boxes ────────────────────────────────────────────────── */
