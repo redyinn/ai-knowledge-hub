@@ -25,20 +25,20 @@ OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
 # ── Models (OpenRouter free tier) ────────────────────────────────────
 MODELS = {
     "simple": {
-        "id": "meta-llama/llama-3.1-8b-instruct:free",
-        "name": "Llama 3.1 8B",
+        "id": "google/gemma-3-4b-it:free",
+        "name": "Gemma 3 4B",
         "cost_per_1k": 0.0,
         "description": "Fast, lightweight — ideal for simple factual questions",
     },
     "medium": {
-        "id": "mistralai/mistral-7b-instruct:free",
-        "name": "Mistral 7B",
+        "id": "mistralai/mistral-small-3.1-24b-instruct:free",
+        "name": "Mistral Small 3.1 24B",
         "cost_per_1k": 0.0,
         "description": "Balanced — good for summaries and moderate reasoning",
     },
     "complex": {
-        "id": "qwen/qwen3-14b:free",
-        "name": "Qwen3 14B",
+        "id": "meta-llama/llama-3.3-70b-instruct:free",
+        "name": "Llama 3.3 70B",
         "cost_per_1k": 0.0,
         "description": "Powerful — handles multi-step reasoning and synthesis",
     },

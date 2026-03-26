@@ -185,16 +185,18 @@ class RAGPipeline:
 
         client = OpenAI(base_url=OPENROUTER_BASE_URL, api_key=api_key)
 
-        response = client.chat.completions.create(
-            model=model_id,
-            messages=[
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": prompt},
-            ],
-            max_tokens=2000,
-        )
-
-        answer = response.choices[0].message.content or ""
+        try:
+            response = client.chat.completions.create(
+                model=model_id,
+                messages=[
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {"role": "user", "content": prompt},
+                ],
+                max_tokens=2000,
+            )
+            answer = response.choices[0].message.content or ""
+        except Exception as e:
+            answer = f"Error calling model {model_id}: {e}"
 
         return RAGResponse(
             answer=answer,
@@ -250,19 +252,22 @@ class RAGPipeline:
 
         client = OpenAI(base_url=OPENROUTER_BASE_URL, api_key=api_key)
 
-        stream = client.chat.completions.create(
-            model=model_id,
-            messages=[
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": prompt},
-            ],
-            max_tokens=2000,
-            stream=True,
-        )
+        try:
+            stream = client.chat.completions.create(
+                model=model_id,
+                messages=[
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {"role": "user", "content": prompt},
+                ],
+                max_tokens=2000,
+                stream=True,
+            )
 
-        full_answer = ""
-        for chunk in stream:
-            delta = chunk.choices[0].delta.content
-            if delta:
-                full_answer += delta
-                yield delta
+            full_answer = ""
+            for chunk in stream:
+                delta = chunk.choices[0].delta.content
+                if delta:
+                    full_answer += delta
+                    yield delta
+        except Exception as e:
+            yield f"\n\nError calling model {model_id}: {e}"
