@@ -46,8 +46,8 @@ graph TB
     subgraph Query
         G[❓ User Question] --> H{Query Router}
         H -->|Simple| I1[Gemma 3 4B]
-        H -->|Medium| I2[Mistral Small 3.1 24B]
-        H -->|Complex| I3[Llama 3.3 70B]
+        H -->|Medium| I2[Step 3.5 Flash]
+        H -->|Complex| I3[Trinity Mini]
 
         G --> J[Vector Search]
         F --> J
@@ -169,8 +169,8 @@ The router analyzes each query using heuristic scoring:
 
 ```
 "What is Python?"           → simple  → Gemma 3 4B (fast)
-"Summarize the key points"  → medium  → Mistral Small 3.1 24B (balanced)
-"Compare X and Y, analyze   → complex → Llama 3.3 70B (powerful)
+"Summarize the key points"  → medium  → Step 3.5 Flash (balanced)
+"Compare X and Y, analyze   → complex → Trinity Mini (powerful)
  implications for Z"
 ```
 

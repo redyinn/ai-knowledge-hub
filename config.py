@@ -31,14 +31,14 @@ MODELS = {
         "description": "Fast, lightweight — ideal for simple factual questions",
     },
     "medium": {
-        "id": "mistralai/mistral-small-3.1-24b-instruct:free",
-        "name": "Mistral Small 3.1 24B",
+        "id": "stepfun/step-3.5-flash:free",
+        "name": "Step 3.5 Flash",
         "cost_per_1k": 0.0,
         "description": "Balanced — good for summaries and moderate reasoning",
     },
     "complex": {
-        "id": "meta-llama/llama-3.3-70b-instruct:free",
-        "name": "Llama 3.3 70B",
+        "id": "arcee-ai/trinity-mini:free",
+        "name": "Trinity Mini",
         "cost_per_1k": 0.0,
         "description": "Powerful — handles multi-step reasoning and synthesis",
     },

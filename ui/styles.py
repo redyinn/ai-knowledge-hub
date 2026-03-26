@@ -166,6 +166,18 @@ CUSTOM_CSS = """
     border-radius: 2px !important;
     font-family: 'Inter', sans-serif !important;
     font-weight: 300;
+    color: var(--ink) !important;
+}
+
+[data-testid="stChatMessage"] p,
+[data-testid="stChatMessage"] span,
+[data-testid="stChatMessage"] li,
+[data-testid="stChatMessage"] div {
+    color: var(--ink) !important;
+}
+
+[data-testid="stChatMessage"] [data-testid="stMarkdownContainer"] {
+    color: var(--ink) !important;
 }
 
 .stChatInputContainer {
@@ -176,6 +188,7 @@ CUSTOM_CSS = """
 [data-testid="stChatInput"] textarea {
     font-family: 'Inter', sans-serif !important;
     font-weight: 300 !important;
+    color: var(--ink) !important;
 }
 
 /* ── Routing Badge ───────────────────────────────────────────────── */
@@ -363,6 +376,17 @@ hr {
     font-size: 0.7rem !important;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+}
+
+/* ── Force dark text everywhere ─────────────────────────────────── */
+.stApp p, .stApp span, .stApp li, .stApp label,
+.stApp [data-testid="stMarkdownContainer"],
+.stApp [data-testid="stText"] {
+    color: var(--ink) !important;
+}
+
+.stApp h1, .stApp h2, .stApp h3, .stApp h4, .stApp h5, .stApp h6 {
+    color: var(--ink) !important;
 }
 </style>
 """
